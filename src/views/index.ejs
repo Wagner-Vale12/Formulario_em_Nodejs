@@ -1,0 +1,111 @@
+<html lang="pt-br">
+  <%- include('./patials/head.ejs') %>
+  <body>
+    <%- include('./patials/navbar.ejs') %>
+    <% if (flashMessage) { %>
+      <div class="alert alert-<%= flashMessage.type %> alert-floating" id="flash-message">
+        <div class="alert-content">
+          <span><%= flashMessage.text %></span>
+        </div>
+      </div>
+    <% } %>
+
+    <div class="content">
+      <section class="panel form-panel">
+        <form class="user-form" action="/users" method="POST">
+          <h3 class="form-title">Cadastrar usuário</h3>
+          <div class="form-grid">
+            <input type="text" name="firstName" placeholder="Primeiro nome" required />
+            <input type="text" name="lastName" placeholder="Sobrenome" required />
+            <input type="email" name="email" placeholder="Email" required />
+            <input type="password" name="password" placeholder="Senha" minlength="7" required />
+          </div>
+          <button type="submit">Salvar usuário</button>
+        </form>
+      </section>
+
+      <section class="panel users-panel">
+        <div class="users-panel-header">
+          <h3 class="form-title">Usuários cadastrados</h3>
+          <span class="users-counter"><%= users.length %> cadastrados</span>
+        </div>
+
+        <section class="users-list">
+          <% if (users.length > 0) { %>
+            <% users.forEach(user => { %>
+              <article class="user-card">
+                <h3 class="title"><%= user.firstName %> <%= user.lastName %></h3>
+                <p><%= user.email %></p>
+                <div class="card-actions">
+                  <a class="action-button edit-button" href="/users/<%= user._id %>/edit">Editar</a>
+                  <form class="delete-form" action="/users/<%= user._id %>/delete" method="POST">
+                    <button class="action-button delete-button" type="submit">Deletar</button>
+                  </form>
+                </div>
+              </article>
+            <% }) %>
+          <% } else { %>
+            <p class="empty-state">Não há usuários para exibir...</p>
+          <% } %>
+        </section>
+      </section>
+    </div>
+
+    <div class="modal-backdrop" id="delete-modal">
+      <div class="modal-card">
+        <h3>Tem certeza que deseja deletar?</h3>
+        <p>Essa ação remove o cadastro da lista de usuários.</p>
+        <div class="form-actions">
+          <button class="action-button secondary-button" id="cancel-delete" type="button">Cancelar</button>
+          <button class="action-button delete-button" id="confirm-delete" type="button">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const deleteForms = document.querySelectorAll(".delete-form");
+      const deleteModal = document.getElementById("delete-modal");
+      const cancelDeleteButton = document.getElementById("cancel-delete");
+      const confirmDeleteButton = document.getElementById("confirm-delete");
+      let currentDeleteForm = null;
+
+      deleteForms.forEach((form) => {
+        form.addEventListener("submit", (event) => {
+          event.preventDefault();
+          currentDeleteForm = form;
+          deleteModal.classList.add("modal-open");
+        });
+      });
+
+      cancelDeleteButton.addEventListener("click", () => {
+        currentDeleteForm = null;
+        deleteModal.classList.remove("modal-open");
+      });
+
+      confirmDeleteButton.addEventListener("click", () => {
+        if (currentDeleteForm) {
+          currentDeleteForm.submit();
+        }
+      });
+
+      deleteModal.addEventListener("click", (event) => {
+        if (event.target === deleteModal) {
+          currentDeleteForm = null;
+          deleteModal.classList.remove("modal-open");
+        }
+      });
+
+      const flashMessage = document.getElementById("flash-message");
+
+      if (flashMessage) {
+        setTimeout(() => {
+          flashMessage.classList.add("alert-hide");
+        }, 5000);
+
+        setTimeout(() => {
+          flashMessage.remove();
+        }, 5600);
+      }
+    </script>
+  </body>
+</html>
