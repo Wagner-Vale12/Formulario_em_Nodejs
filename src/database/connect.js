@@ -3,8 +3,7 @@ const mongoose = require("mongoose");
 let cachedConnection = null;
 let connectionPromise = null;
 
-const sanitizeMongoUri = (mongoUri) =>
-  mongoUri.replace(/\/\/([^:]+):([^@]+)@/, "//$1:***@");
+mongoose.set("strictQuery", false);
 
 const buildMongoUri = () => {
   if (process.env.MONGODB_URI) {
@@ -47,14 +46,10 @@ const connectToDatabase = async () => {
     })
     .then((connection) => {
       cachedConnection = connection;
-      console.log("Conexao bem-sucedida ao banco de dados MongoDB!");
       return connection;
     })
     .catch((error) => {
       connectionPromise = null;
-      console.log("Falha ao conectar ao MongoDB.");
-      console.log("URI usada:", sanitizeMongoUri(mongoUri));
-      console.log("Erro:", error.message);
       throw error;
     });
 

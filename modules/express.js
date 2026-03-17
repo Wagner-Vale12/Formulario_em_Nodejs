@@ -20,14 +20,6 @@ app.use(async (req, res, next) => {
   }
 });
 
-app.use((req, res, next) => {
-  console.log(`Request Type: ${req.method}`);
-  console.log(`Content Type: ${req.headers["content-type"]}`);
-  console.log(`Date: ${new Date()}`);
-
-  next();
-});
-
 const renderUsersView = async (req, res) => {
   try {
     const users = await UserModel.find({});
