@@ -164,7 +164,7 @@ Os usuarios possuem os seguintes campos:
 Em breve:
 
 - Frontend/SSR: Vercel
-- Link do projeto: `https://formulario-em-nodejs.vercel.app/`
+- Link do projeto: https://formulario-em-nodejs.vercel.app/
 
 - <img width="1355" height="633" alt="image" src="https://github.com/user-attachments/assets/ab56e124-6a20-4ba8-8e83-6c596ab272e5" />
 
