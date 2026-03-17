@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const UserModel = require("../src/models/user.model");
 
 const app = express();
@@ -7,7 +8,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.set("view engine", "ejs");
-app.set("views", "src/views");
+app.set("views", path.join(__dirname, "../src/views"));
 
 app.use((req, res, next) => {
   console.log(`Request Type: ${req.method}`);
@@ -160,6 +161,4 @@ app.delete("/users/:id", async (req, res) => {
   }
 });
 
-const port = 8080;
-
-app.listen(port, () => console.log(`Rodando com Express na porta ${port}!`));
+module.exports = app;
