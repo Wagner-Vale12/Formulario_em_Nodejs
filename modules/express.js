@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const { connectToDatabase } = require("../src/database/connect");
 const UserModel = require("../src/models/user.model");
 
 const app = express();
@@ -9,6 +10,15 @@ app.use(express.urlencoded({ extended: true }));
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../src/views"));
+
+app.use(async (req, res, next) => {
+  try {
+    await connectToDatabase();
+    next();
+  } catch (error) {
+    res.status(500).send("Erro ao conectar ao banco de dados.");
+  }
+});
 
 app.use((req, res, next) => {
   console.log(`Request Type: ${req.method}`);
